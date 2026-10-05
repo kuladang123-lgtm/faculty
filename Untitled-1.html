@@ -1,0 +1,3951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faculty Research Output Monitoring System | CARD MRI</title>
+
+<style>
+:root{
+    --primary:#123c69;
+    --primary-dark:#092c4c;
+    --secondary:#1f7a8c;
+    --accent:#f4b942;
+    --success:#2e9d5b;
+    --danger:#d64545;
+    --warning:#e39b24;
+    --light:#f4f7fb;
+    --white:#ffffff;
+    --dark:#17202a;
+    --gray:#667085;
+    --border:#e2e8f0;
+    --shadow:0 8px 25px rgba(18,60,105,.08);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:var(--light);
+    color:var(--dark);
+}
+
+button,input,select,textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* ================= LOGIN ================= */
+
+.auth-wrapper{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        linear-gradient(135deg,rgba(9,44,76,.97),rgba(31,122,140,.92)),
+        radial-gradient(circle at top right,#f4b942,transparent 35%);
+    padding:25px;
+}
+
+.auth-card{
+    width:100%;
+    max-width:1050px;
+    background:#fff;
+    border-radius:24px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+}
+
+.auth-brand{
+    background:linear-gradient(145deg,#092c4c,#155b78);
+    color:white;
+    padding:55px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.logo-card{
+    width:100px;
+    height:100px;
+    background:white;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:25px;
+    color:#123c69;
+    font-size:28px;
+    font-weight:900;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.logo-card span{
+    display:block;
+    text-align:center;
+    line-height:1.05;
+}
+
+.auth-brand h1{
+    font-size:32px;
+    margin-bottom:15px;
+}
+
+.auth-brand p{
+    line-height:1.7;
+    color:#d8edf5;
+}
+
+.auth-form{
+    padding:50px;
+}
+
+.auth-form h2{
+    color:var(--primary);
+    margin-bottom:8px;
+}
+
+.auth-subtitle{
+    color:var(--gray);
+    margin-bottom:25px;
+}
+
+.form-group{
+    margin-bottom:17px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-size:14px;
+    font-weight:bold;
+    color:#344054;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+    background:white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:var(--secondary);
+    box-shadow:0 0 0 3px rgba(31,122,140,.12);
+}
+
+.btn{
+    border:none;
+    border-radius:9px;
+    padding:11px 16px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-secondary{
+    background:var(--secondary);
+    color:white;
+}
+
+.btn-success{
+    background:var(--success);
+    color:white;
+}
+
+.btn-danger{
+    background:var(--danger);
+    color:white;
+}
+
+.btn-warning{
+    background:var(--warning);
+    color:white;
+}
+
+.btn-light{
+    background:#edf2f7;
+    color:#344054;
+}
+
+.btn-block{
+    width:100%;
+}
+
+.auth-switch{
+    margin-top:20px;
+    text-align:center;
+    color:var(--gray);
+    font-size:14px;
+}
+
+.auth-switch a{
+    color:var(--secondary);
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= APP ================= */
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:250px;
+    background:var(--primary-dark);
+    color:white;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:100;
+    overflow-y:auto;
+}
+
+.sidebar-header{
+    padding:25px 20px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.sidebar-logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.sidebar-logo .mini-logo{
+    width:45px;
+    height:45px;
+    background:white;
+    color:var(--primary);
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:12px;
+    font-weight:900;
+    text-align:center;
+    line-height:1;
+}
+
+.sidebar-logo strong{
+    font-size:14px;
+}
+
+.nav{
+    padding:18px 12px;
+}
+
+.nav-section{
+    font-size:11px;
+    color:#9cb6c7;
+    text-transform:uppercase;
+    padding:12px 10px 7px;
+    letter-spacing:.8px;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#dbe9f0;
+    padding:12px 13px;
+    border-radius:9px;
+    margin-bottom:4px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.nav-item:hover,
+.nav-item.active{
+    background:rgba(255,255,255,.12);
+    color:white;
+}
+
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    min-height:100vh;
+}
+
+.topbar{
+    height:72px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.topbar-title{
+    font-size:20px;
+    font-weight:bold;
+    color:var(--primary);
+}
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.notification{
+    position:relative;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.notification-badge{
+    position:absolute;
+    top:-7px;
+    right:-8px;
+    background:var(--danger);
+    color:white;
+    width:17px;
+    height:17px;
+    border-radius:50%;
+    font-size:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.user-mini{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:var(--secondary);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.user-mini small{
+    display:block;
+    color:var(--gray);
+}
+
+.content{
+    padding:28px;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.page-header h1{
+    color:var(--primary);
+    font-size:26px;
+}
+
+.page-header p{
+    color:var(--gray);
+    margin-top:5px;
+}
+
+/* ================= DASHBOARD ================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    box-shadow:var(--shadow);
+    border-left:4px solid var(--secondary);
+}
+
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-title{
+    color:var(--gray);
+    font-size:13px;
+}
+
+.stat-value{
+    font-size:30px;
+    font-weight:800;
+    color:var(--primary);
+    margin-top:8px;
+}
+
+.stat-icon{
+    width:45px;
+    height:45px;
+    border-radius:12px;
+    background:#e8f3f5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+}
+
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.card-title h3{
+    color:var(--primary);
+}
+
+/* ================= TABLE ================= */
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px 12px;
+    text-align:left;
+    border-bottom:1px solid #edf0f4;
+    font-size:13px;
+}
+
+th{
+    background:#f7f9fb;
+    color:#475467;
+    font-size:12px;
+    text-transform:uppercase;
+}
+
+tbody tr:hover{
+    background:#fafcff;
+}
+
+.status{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.status-pending{
+    background:#fff4d6;
+    color:#9a6700;
+}
+
+.status-approved{
+    background:#dff6e7;
+    color:#19713b;
+}
+
+.status-rejected{
+    background:#fde3e3;
+    color:#a62929;
+}
+
+.status-review{
+    background:#e4efff;
+    color:#2259a5;
+}
+
+.status-published{
+    background:#e4f5f3;
+    color:#176d65;
+}
+
+.action-group{
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+}
+
+.action-btn{
+    border:none;
+    padding:6px 8px;
+    border-radius:6px;
+    font-size:11px;
+    cursor:pointer;
+}
+
+/* ================= FILTERS ================= */
+
+.filters{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr auto;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.filters input,
+.filters select{
+    border:1px solid var(--border);
+    padding:11px;
+    border-radius:8px;
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:500;
+    padding:20px;
+}
+
+.modal{
+    background:white;
+    width:100%;
+    max-width:700px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:16px;
+    padding:25px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.close{
+    border:none;
+    background:none;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.form-grid .full{
+    grid-column:1/-1;
+}
+
+.modal-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:20px;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:20px;
+}
+
+.profile-card{
+    text-align:center;
+}
+
+.profile-avatar{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--secondary),var(--primary));
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:35px;
+    font-weight:bold;
+    margin:10px auto 15px;
+}
+
+.profile-card h2{
+    color:var(--primary);
+}
+
+.profile-card p{
+    color:var(--gray);
+    margin-top:5px;
+}
+
+/* ================= REPORT ================= */
+
+.report-summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.report-box{
+    border:1px solid var(--border);
+    padding:18px;
+    border-radius:10px;
+}
+
+.report-box h4{
+    color:var(--gray);
+}
+
+.report-box strong{
+    display:block;
+    font-size:27px;
+    color:var(--primary);
+    margin-top:5px;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#17202a;
+    color:white;
+    padding:14px 18px;
+    border-radius:9px;
+    z-index:1000;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.toast.success{
+    background:var(--success);
+}
+
+.toast.error{
+    background:var(--danger);
+}
+
+/* ================= RESPONSIVE ================= */
+
+.mobile-menu{
+    display:none;
+    border:none;
+    background:none;
+    font-size:24px;
+}
+
+@media(max-width:950px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .grid-2{
+        grid-template-columns:1fr;
+    }
+
+    .auth-card{
+        grid-template-columns:1fr;
+    }
+
+    .auth-brand{
+        display:none;
+    }
+
+    .profile-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .filters{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .auth-form{
+        padding:30px 22px;
+    }
+
+    .content{
+        padding:18px;
+    }
+}
+
+/* PRINT */
+
+@media print{
+    .sidebar,
+    .topbar,
+    .btn,
+    .filters{
+        display:none!important;
+    }
+
+    .main{
+        margin:0;
+        width:100%;
+    }
+
+    .content{
+        padding:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= AUTH ================= -->
+
+<div id="authScreen" class="auth-wrapper">
+
+    <div class="auth-card">
+
+        <div class="auth-brand">
+
+            <div class="logo-card">
+                <span>CARD<br>MRI</span>
+            </div>
+
+            <h1>Faculty Research Output Monitoring System</h1>
+
+            <p>
+                A centralized platform for monitoring, reviewing,
+                approving, and reporting faculty research outputs.
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Analyze • Monitor • Approve • Report</strong>
+            </p>
+
+        </div>
+
+        <!-- LOGIN -->
+
+        <div id="loginForm" class="auth-form">
+
+            <h2>Welcome Back</h2>
+            <p class="auth-subtitle">
+                Sign in to your research monitoring account.
+            </p>
+
+            <div id="loginMessage"></div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input id="loginEmail" type="email"
+                       placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input id="loginPassword" type="password"
+                       placeholder="Enter your password">
+            </div>
+
+            <button class="btn btn-primary btn-block"
+                    onclick="login()">
+                Sign In
+            </button>
+
+            <div class="auth-switch">
+                Don't have an account?
+                <a onclick="showRegister()">Create Account</a>
+            </div>
+
+        </div>
+
+        <!-- REGISTER -->
+
+        <div id="registerForm" class="auth-form hidden">
+
+            <h2>Create Account</h2>
+            <p class="auth-subtitle">
+                Register as a faculty member.
+            </p>
+
+            <div id="registerMessage"></div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input id="regName" type="text"
+                       placeholder="Juan Dela Cruz">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input id="regEmail" type="email"
+                       placeholder="faculty@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Department</label>
+                <input id="regDepartment" type="text"
+                       placeholder="Research and Development">
+            </div>
+
+            <div class="form-group">
+                <label>Position</label>
+                <input id="regPosition" type="text"
+                       placeholder="Faculty Researcher">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input id="regPassword" type="password"
+                       placeholder="Create a password">
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input id="regConfirmPassword" type="password"
+                       placeholder="Confirm password">
+            </div>
+
+            <button class="btn btn-secondary btn-block"
+                    onclick="register()">
+                Create Account
+            </button>
+
+            <div class="auth-switch">
+                Already have an account?
+                <a onclick="showLogin()">Sign In</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= APPLICATION ================= -->
+
+<div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+
+    <aside id="sidebar" class="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="sidebar-logo">
+
+                <div class="mini-logo">
+                    CARD<br>MRI
+                </div>
+
+                <strong>
+                    Research<br>
+                    Monitoring
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div class="nav">
+
+            <div class="nav-section">Main</div>
+
+            <div class="nav-item active"
+                 onclick="navigate('dashboard',this)">
+                📊 Dashboard
+            </div>
+
+            <div class="nav-item"
+                 onclick="navigate('research',this)">
+                📚 Research Outputs
+            </div>
+
+            <div class="nav-item"
+                 onclick="navigate('workflow',this)">
+                🔄 Workflow
+            </div>
+
+            <div class="nav-section">Management</div>
+
+            <div id="usersNav"
+                 class="nav-item"
+                 onclick="navigate('users',this)">
+                👥 User Management
+            </div>
+
+            <div class="nav-item"
+                 onclick="navigate('reports',this)">
+                📈 Reports
+            </div>
+
+            <div class="nav-item"
+                 onclick="navigate('history',this)">
+                📝 Activity History
+            </div>
+
+            <div class="nav-section">Account</div>
+
+            <div class="nav-item"
+                 onclick="navigate('profile',this)">
+                👤 My Profile
+            </div>
+
+            <div class="nav-item"
+                 onclick="logout()">
+                🚪 Logout
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div style="display:flex;align-items:center;gap:12px">
+
+                <button class="mobile-menu"
+                        onclick="toggleSidebar()">
+                    ☰
+                </button>
+
+                <div id="topTitle"
+                     class="topbar-title">
+                    Dashboard
+                </div>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="notification"
+                     onclick="navigate('workflow')">
+                    🔔
+                    <span id="notificationBadge"
+                          class="notification-badge">0</span>
+                </div>
+
+                <div class="user-mini"
+                     onclick="navigate('profile')">
+
+                    <div id="topAvatar"
+                         class="avatar">
+                        U
+                    </div>
+
+                    <div>
+                        <strong id="topName">
+                            User
+                        </strong>
+                        <small id="topRole">
+                            Faculty
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+            <!-- DASHBOARD -->
+
+            <section id="page-dashboard" class="page">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>
+                            Research output monitoring overview
+                        </p>
+                    </div>
+
+                    <button class="btn btn-primary"
+                            onclick="openResearchModal()">
+                        + Add Research
+                    </button>
+
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">
+                                    Total Research
+                                </div>
+                                <div id="statTotal"
+                                     class="stat-value">0</div>
+                            </div>
+                            <div class="stat-icon">📚</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">
+                                    Pending Review
+                                </div>
+                                <div id="statPending"
+                                     class="stat-value">0</div>
+                            </div>
+                            <div class="stat-icon">⏳</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">
+                                    Approved
+                                </div>
+                                <div id="statApproved"
+                                     class="stat-value">0</div>
+                            </div>
+                            <div class="stat-icon">✅</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-title">
+                                    Published
+                                </div>
+                                <div id="statPublished"
+                                     class="stat-value">0</div>
+                            </div>
+                            <div class="stat-icon">🌐</div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="grid-2">
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            <h3>Recent Research Outputs</h3>
+
+                            <button class="btn btn-light"
+                                    onclick="navigate('research')">
+                                View All
+                            </button>
+                        </div>
+
+                        <div class="table-container">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Faculty</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="recentResearch">
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+                            <h3>Research Status</h3>
+                        </div>
+
+                        <div id="statusSummary"></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RESEARCH -->
+
+            <section id="page-research" class="page hidden">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Research Outputs</h1>
+                        <p>
+                            Manage and monitor faculty research.
+                        </p>
+                    </div>
+
+                    <button class="btn btn-primary"
+                            onclick="openResearchModal()">
+                        + Add Research
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="filters">
+
+                        <input id="researchSearch"
+                               placeholder="Search research title, author, category..."
+                               oninput="renderResearch()">
+
+                        <select id="researchStatus"
+                                onchange="renderResearch()">
+
+                            <option value="">All Status</option>
+                            <option>Pending</option>
+                            <option>Under Review</option>
+                            <option>Approved</option>
+                            <option>Rejected</option>
+                            <option>Published</option>
+
+                        </select>
+
+                        <select id="researchType"
+                                onchange="renderResearch()">
+
+                            <option value="">All Types</option>
+                            <option>Journal Article</option>
+                            <option>Conference Paper</option>
+                            <option>Thesis</option>
+                            <option>Research Project</option>
+                            <option>Book Chapter</option>
+
+                        </select>
+
+                        <button class="btn btn-secondary"
+                                onclick="exportCSV()">
+                            Export CSV
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Faculty</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="researchTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- WORKFLOW -->
+
+            <section id="page-workflow"
+                     class="page hidden">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Research Workflow</h1>
+                        <p>
+                            Process submitted research outputs.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Research</th>
+                                    <th>Faculty</th>
+                                    <th>Current Status</th>
+                                    <th>Workflow Action</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="workflowTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- USERS -->
+
+            <section id="page-users"
+                     class="page hidden">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>User Management</h1>
+                        <p>
+                            Manage registered system users.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Role</th>
+                                    <th>Joined</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="usersTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- REPORTS -->
+
+            <section id="page-reports"
+                     class="page hidden">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Reports & Analytics</h1>
+                        <p>
+                            Research output summary.
+                        </p>
+                    </div>
+
+                    <button class="btn btn-primary"
+                            onclick="window.print()">
+                        Print Report
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="report-summary">
+
+                        <div class="report-box">
+                            <h4>Total Research</h4>
+                            <strong id="reportTotal">0</strong>
+                        </div>
+
+                        <div class="report-box">
+                            <h4>Approved Research</h4>
+                            <strong id="reportApproved">0</strong>
+                        </div>
+
+                        <div class="report-box">
+                            <h4>Published Research</h4>
+                            <strong id="reportPublished">0</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-title">
+                        <h3>Research by Type</h3>
+                    </div>
+
+                    <div id="typeReport"></div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-title">
+                        <h3>Research by Department</h3>
+                    </div>
+
+                    <div id="departmentReport"></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- HISTORY -->
+
+            <section id="page-history"
+                     class="page hidden">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Activity History</h1>
+                        <p>
+                            System transactions and audit trail.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="historyTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PROFILE -->
+
+            <section id="page-profile"
+                     class="page hidden">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>My Profile</h1>
+                        <p>
+                            View and update your personal information.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="profile-grid">
+
+                    <div class="card profile-card">
+
+                        <div id="profileAvatar"
+                             class="profile-avatar">
+                            U
+                        </div>
+
+                        <h2 id="profileName">
+                            User
+                        </h2>
+
+                        <p id="profileRole">
+                            Faculty
+                        </p>
+
+                        <br>
+
+                        <span id="profileStatus"
+                              class="status status-approved">
+                            Active
+                        </span>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-title">
+
+                            <h3>Personal Information</h3>
+
+                            <button class="btn btn-primary"
+                                    onclick="saveProfile()">
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Full Name</label>
+
+                                <input id="profileFullName"
+                                       type="text">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Email</label>
+
+                                <input id="profileEmail"
+                                       type="email">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Department</label>
+
+                                <input id="profileDepartment"
+                                       type="text">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Position</label>
+
+                                <input id="profilePosition"
+                                       type="text">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Contact Number</label>
+
+                                <input id="profileContact"
+                                       type="text">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Research Specialization</label>
+
+                                <input id="profileSpecialization"
+                                       type="text">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ================= RESEARCH MODAL ================= -->
+
+<div id="researchModal"
+     class="modal-overlay hidden">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="researchModalTitle">
+                Add Research Output
+            </h2>
+
+            <button class="close"
+                    onclick="closeResearchModal()">
+                ×
+            </button>
+
+        </div>
+
+        <input type="hidden"
+               id="researchId">
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>Research Title *</label>
+
+                <input id="researchTitle"
+                       type="text"
+                       placeholder="Enter research title">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Research Type *</label>
+
+                <select id="researchCategory">
+
+                    <option value="">
+                        Select Type
+                    </option>
+
+                    <option>Journal Article</option>
+                    <option>Conference Paper</option>
+                    <option>Thesis</option>
+                    <option>Research Project</option>
+                    <option>Book Chapter</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Research Date *</label>
+
+                <input id="researchDate"
+                       type="date">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Researcher / Faculty</label>
+
+                <input id="researchAuthor"
+                       type="text">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Department</label>
+
+                <input id="researchDepartment"
+                       type="text">
+
+            </div>
+
+            <div class="form-group full">
+
+                <label>Abstract / Description</label>
+
+                <textarea id="researchDescription"
+                          rows="4"
+                          placeholder="Brief description of the research"></textarea>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Publication / Journal</label>
+
+                <input id="researchJournal"
+                       type="text"
+                       placeholder="Optional">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Research Status</label>
+
+                <select id="researchStatusForm">
+
+                    <option>Pending</option>
+                    <option>Under Review</option>
+                    <option>Approved</option>
+                    <option>Rejected</option>
+                    <option>Published</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button class="btn btn-light"
+                    onclick="closeResearchModal()">
+                Cancel
+            </button>
+
+            <button class="btn btn-primary"
+                    onclick="saveResearch()">
+                Save Research
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div id="toast"
+     class="toast hidden">
+</div>
+
+
+<script>
+
+/* =====================================================
+   FACULTY RESEARCH OUTPUT MONITORING SYSTEM
+   Single-file demonstration application
+   ===================================================== */
+
+
+/* ================= STORAGE ================= */
+
+const STORAGE = {
+    users: "cardmri_users",
+    research: "cardmri_research",
+    history: "cardmri_history",
+    session: "cardmri_session"
+};
+
+
+/* ================= DEMO DATA ================= */
+
+function initializeData(){
+
+    if(!localStorage.getItem(STORAGE.users)){
+
+        const users = [
+
+            {
+                id:1,
+                name:"System Administrator",
+                email:"admin@cardmri.com",
+                password:"admin123",
+                role:"Administrator",
+                department:"Research and Development",
+                position:"System Administrator",
+                contact:"09170000001",
+                specialization:"Research Management",
+                joined:"2026-01-10"
+            },
+
+            {
+                id:2,
+                name:"Maria Santos",
+                email:"faculty@cardmri.com",
+                password:"faculty123",
+                role:"Faculty",
+                department:"Social Development",
+                position:"Faculty Researcher",
+                contact:"09170000002",
+                specialization:"Community Development",
+                joined:"2026-01-15"
+            },
+
+            {
+                id:3,
+                name:"Juan Dela Cruz",
+                email:"juan@cardmri.com",
+                password:"juan123",
+                role:"Faculty",
+                department:"Education",
+                position:"Senior Faculty",
+                contact:"09170000003",
+                specialization:"Educational Research",
+                joined:"2026-01-20"
+            }
+
+        ];
+
+        localStorage.setItem(
+            STORAGE.users,
+            JSON.stringify(users)
+        );
+
+    }
+
+
+    if(!localStorage.getItem(STORAGE.research)){
+
+        const research = [
+
+            {
+                id:1001,
+                title:"Community-Based Financial Literacy Program",
+                category:"Research Project",
+                date:"2026-02-15",
+                author:"Maria Santos",
+                email:"faculty@cardmri.com",
+                department:"Social Development",
+                description:"Study on financial literacy interventions in local communities.",
+                journal:"CARD MRI Research Journal",
+                status:"Approved",
+                created:"2026-02-15"
+            },
+
+            {
+                id:1002,
+                title:"Digital Learning Practices Among Faculty",
+                category:"Journal Article",
+                date:"2026-03-02",
+                author:"Juan Dela Cruz",
+                email:"juan@cardmri.com",
+                department:"Education",
+                description:"Research on digital learning adoption.",
+                journal:"Education Technology Review",
+                status:"Under Review",
+                created:"2026-03-02"
+            },
+
+            {
+                id:1003,
+                title:"Microfinance and Household Resilience",
+                category:"Conference Paper",
+                date:"2026-03-10",
+                author:"Maria Santos",
+                email:"faculty@cardmri.com",
+                department:"Social Development",
+                description:"Study examining the effect of microfinance on household resilience.",
+                journal:"Philippine Development Conference",
+                status:"Pending",
+                created:"2026-03-10"
+            },
+
+            {
+                id:1004,
+                title:"Community Health Information Systems",
+                category:"Research Project",
+                date:"2026-03-20",
+                author:"Juan Dela Cruz",
+                email:"juan@cardmri.com",
+                department:"Education",
+                description:"Development of information systems for community health.",
+                journal:"Community Informatics Journal",
+                status:"Published",
+                created:"2026-03-20"
+            }
+
+        ];
+
+        localStorage.setItem(
+            STORAGE.research,
+            JSON.stringify(research)
+        );
+
+    }
+
+
+    if(!localStorage.getItem(STORAGE.history)){
+
+        const history = [
+
+            {
+                id:1,
+                date:new Date().toISOString(),
+                user:"System",
+                action:"SYSTEM INITIALIZED",
+                details:"Demo research monitoring data initialized."
+            }
+
+        ];
+
+        localStorage.setItem(
+            STORAGE.history,
+            JSON.stringify(history)
+        );
+
+    }
+
+}
+
+
+/* ================= HELPERS ================= */
+
+function getUsers(){
+
+    return JSON.parse(
+        localStorage.getItem(STORAGE.users) || "[]"
+    );
+
+}
+
+function getResearch(){
+
+    return JSON.parse(
+        localStorage.getItem(STORAGE.research) || "[]"
+    );
+
+}
+
+function getHistory(){
+
+    return JSON.parse(
+        localStorage.getItem(STORAGE.history) || "[]"
+    );
+
+}
+
+function getSession(){
+
+    return JSON.parse(
+        localStorage.getItem(STORAGE.session) || "null"
+    );
+
+}
+
+function saveUsers(data){
+
+    localStorage.setItem(
+        STORAGE.users,
+        JSON.stringify(data)
+    );
+
+}
+
+function saveResearch(data){
+
+    localStorage.setItem(
+        STORAGE.research,
+        JSON.stringify(data)
+    );
+
+}
+
+function saveHistory(data){
+
+    localStorage.setItem(
+        STORAGE.history,
+        JSON.stringify(data)
+    );
+
+}
+
+
+function currentUser(){
+
+    const session = getSession();
+
+    if(!session) return null;
+
+    return getUsers().find(
+        u => u.id === session.id
+    );
+
+}
+
+
+/* ================= TOAST ================= */
+
+function toast(message,type="success"){
+
+    const el = document.getElementById("toast");
+
+    el.textContent = message;
+
+    el.className =
+        "toast " + type;
+
+    el.classList.remove("hidden");
+
+    setTimeout(()=>{
+        el.classList.add("hidden");
+    },3000);
+
+}
+
+
+/* ================= AUTH ================= */
+
+function showRegister(){
+
+    document
+        .getElementById("loginForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("registerForm")
+        .classList.remove("hidden");
+
+}
+
+
+function showLogin(){
+
+    document
+        .getElementById("registerForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("loginForm")
+        .classList.remove("hidden");
+
+}
+
+
+function login(){
+
+    const email =
+        document
+        .getElementById("loginEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
+
+    if(!email || !password){
+
+        toast(
+            "Please enter email and password.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    const user =
+        getUsers().find(
+            u =>
+                u.email.toLowerCase() === email &&
+                u.password === password
+        );
+
+    if(!user){
+
+        toast(
+            "Invalid email or password.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        STORAGE.session,
+        JSON.stringify({
+            id:user.id
+        })
+    );
+
+    addHistory(
+        "LOGIN",
+        "User logged into the system."
+    );
+
+    document
+        .getElementById("authScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+    initializeApp();
+
+}
+
+
+function register(){
+
+    const name =
+        document.getElementById("regName").value.trim();
+
+    const email =
+        document.getElementById("regEmail").value.trim().toLowerCase();
+
+    const department =
+        document.getElementById("regDepartment").value.trim();
+
+    const position =
+        document.getElementById("regPosition").value.trim();
+
+    const password =
+        document.getElementById("regPassword").value;
+
+    const confirm =
+        document.getElementById("regConfirmPassword").value;
+
+    if(!name || !email || !department ||
+       !position || !password){
+
+        toast(
+            "Please complete all required fields.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(password.length < 6){
+
+        toast(
+            "Password must contain at least 6 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(password !== confirm){
+
+        toast(
+            "Passwords do not match.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    const users = getUsers();
+
+    if(users.some(u => u.email === email)){
+
+        toast(
+            "Email is already registered.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    const newUser = {
+
+        id:Date.now(),
+
+        name,
+
+        email,
+
+        password,
+
+        role:"Faculty",
+
+        department,
+
+        position,
+
+        contact:"",
+
+        specialization:"",
+
+        joined:new Date()
+            .toISOString()
+            .split("T")[0]
+
+    };
+
+    users.push(newUser);
+
+    saveUsers(users);
+
+    toast(
+        "Account created successfully."
+    );
+
+    document.getElementById("regName").value="";
+    document.getElementById("regEmail").value="";
+    document.getElementById("regDepartment").value="";
+    document.getElementById("regPosition").value="";
+    document.getElementById("regPassword").value="";
+    document.getElementById("regConfirmPassword").value="";
+
+    showLogin();
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+    addHistory(
+        "LOGOUT",
+        "User logged out."
+    );
+
+    localStorage.removeItem(
+        STORAGE.session
+    );
+
+    document
+        .getElementById("app")
+        .classList.add("hidden");
+
+    document
+        .getElementById("authScreen")
+        .classList.remove("hidden");
+
+    showLogin();
+
+}
+
+
+/* ================= APPLICATION ================= */
+
+function initializeApp(){
+
+    const user = currentUser();
+
+    if(!user) return;
+
+    document.getElementById("topName")
+        .textContent = user.name;
+
+    document.getElementById("topRole")
+        .textContent = user.role;
+
+    document.getElementById("topAvatar")
+        .textContent = initials(user.name);
+
+    if(user.role !== "Administrator"){
+
+        document
+            .getElementById("usersNav")
+            .classList.add("hidden");
+
+    }else{
+
+        document
+            .getElementById("usersNav")
+            .classList.remove("hidden");
+
+    }
+
+    updateAll();
+
+}
+
+
+function initials(name){
+
+    return name
+        .split(" ")
+        .map(x => x[0])
+        .slice(0,2)
+        .join("")
+        .toUpperCase();
+
+}
+
+
+/* ================= NAVIGATION ================= */
+
+function navigate(page,element){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(p =>
+            p.classList.add("hidden")
+        );
+
+    const target =
+        document.getElementById(
+            "page-" + page
+        );
+
+    if(target){
+        target.classList.remove("hidden");
+    }
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(n =>
+            n.classList.remove("active")
+        );
+
+    if(element){
+        element.classList.add("active");
+    }
+
+    const titles = {
+
+        dashboard:"Dashboard",
+        research:"Research Outputs",
+        workflow:"Research Workflow",
+        users:"User Management",
+        reports:"Reports & Analytics",
+        history:"Activity History",
+        profile:"My Profile"
+
+    };
+
+    document.getElementById("topTitle")
+        .textContent =
+        titles[page] || "Dashboard";
+
+    if(page === "research")
+        renderResearch();
+
+    if(page === "workflow")
+        renderWorkflow();
+
+    if(page === "users")
+        renderUsers();
+
+    if(page === "reports")
+        renderReports();
+
+    if(page === "history")
+        renderHistory();
+
+    if(page === "profile")
+        renderProfile();
+
+}
+
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* ================= DASHBOARD ================= */
+
+function updateDashboard(){
+
+    const research = getResearch();
+
+    const user = currentUser();
+
+    let data = research;
+
+    if(user && user.role !== "Administrator"){
+
+        data =
+            research.filter(
+                r => r.email === user.email
+            );
+
+    }
+
+    const total = data.length;
+
+    const pending =
+        data.filter(
+            r => r.status === "Pending" ||
+                 r.status === "Under Review"
+        ).length;
+
+    const approved =
+        data.filter(
+            r => r.status === "Approved"
+        ).length;
+
+    const published =
+        data.filter(
+            r => r.status === "Published"
+        ).length;
+
+    document.getElementById("statTotal")
+        .textContent = total;
+
+    document.getElementById("statPending")
+        .textContent = pending;
+
+    document.getElementById("statApproved")
+        .textContent = approved;
+
+    document.getElementById("statPublished")
+        .textContent = published;
+
+
+    const recent =
+        [...data]
+        .sort((a,b) =>
+            new Date(b.created) -
+            new Date(a.created)
+        )
+        .slice(0,5);
+
+    document.getElementById("recentResearch")
+        .innerHTML =
+        recent.map(r => `
+
+            <tr>
+
+                <td>
+                    <strong>${escapeHTML(r.title)}</strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(r.author)}
+                </td>
+
+                <td>
+                    ${statusBadge(r.status)}
+                </td>
+
+            </tr>
+
+        `).join("") ||
+        `<tr>
+            <td colspan="3">
+                No research records.
+            </td>
+        </tr>`;
+
+
+    const statuses = [
+
+        "Pending",
+        "Under Review",
+        "Approved",
+        "Rejected",
+        "Published"
+
+    ];
+
+    document.getElementById("statusSummary")
+        .innerHTML =
+        statuses.map(status => {
+
+            const count =
+                data.filter(
+                    r => r.status === status
+                ).length;
+
+            return `
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:12px 0;
+                    border-bottom:1px solid #edf0f4">
+
+                    <span>
+                        ${statusBadge(status)}
+                    </span>
+
+                    <strong>
+                        ${count}
+                    </strong>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ================= RESEARCH ================= */
+
+function openResearchModal(id=null){
+
+    const modal =
+        document.getElementById(
+            "researchModal"
+        );
+
+    modal.classList.remove("hidden");
+
+    document.getElementById(
+        "researchId"
+    ).value = "";
+
+    document.getElementById(
+        "researchModalTitle"
+    ).textContent =
+        "Add Research Output";
+
+    clearResearchForm();
+
+    const user = currentUser();
+
+    if(user){
+
+        document.getElementById(
+            "researchAuthor"
+        ).value = user.name;
+
+        document.getElementById(
+            "researchDepartment"
+        ).value = user.department;
+
+    }
+
+    if(id){
+
+        const r =
+            getResearch().find(
+                x => x.id === id
+            );
+
+        if(!r) return;
+
+        document.getElementById(
+            "researchModalTitle"
+        ).textContent =
+            "Edit Research Output";
+
+        document.getElementById(
+            "researchId"
+        ).value = r.id;
+
+        document.getElementById(
+            "researchTitle"
+        ).value = r.title;
+
+        document.getElementById(
+            "researchCategory"
+        ).value = r.category;
+
+        document.getElementById(
+            "researchDate"
+        ).value = r.date;
+
+        document.getElementById(
+            "researchAuthor"
+        ).value = r.author;
+
+        document.getElementById(
+            "researchDepartment"
+        ).value = r.department;
+
+        document.getElementById(
+            "researchDescription"
+        ).value = r.description;
+
+        document.getElementById(
+            "researchJournal"
+        ).value = r.journal;
+
+        document.getElementById(
+            "researchStatusForm"
+        ).value = r.status;
+
+    }
+
+}
+
+
+function closeResearchModal(){
+
+    document
+        .getElementById("researchModal")
+        .classList.add("hidden");
+
+}
+
+
+function clearResearchForm(){
+
+    document.getElementById(
+        "researchTitle"
+    ).value="";
+
+    document.getElementById(
+        "researchCategory"
+    ).value="";
+
+    document.getElementById(
+        "researchDate"
+    ).value="";
+
+    document.getElementById(
+        "researchDescription"
+    ).value="";
+
+    document.getElementById(
+        "researchJournal"
+    ).value="";
+
+    document.getElementById(
+        "researchStatusForm"
+    ).value="Pending";
+
+}
+
+
+function saveResearch(){
+
+    const id =
+        document.getElementById(
+            "researchId"
+        ).value;
+
+    const title =
+        document.getElementById(
+            "researchTitle"
+        ).value.trim();
+
+    const category =
+        document.getElementById(
+            "researchCategory"
+        ).value;
+
+    const date =
+        document.getElementById(
+            "researchDate"
+        ).value;
+
+    const author =
+        document.getElementById(
+            "researchAuthor"
+        ).value.trim();
+
+    const department =
+        document.getElementById(
+            "researchDepartment"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "researchDescription"
+        ).value.trim();
+
+    const journal =
+        document.getElementById(
+            "researchJournal"
+        ).value.trim();
+
+    let status =
+        document.getElementById(
+            "researchStatusForm"
+        ).value;
+
+    const user = currentUser();
+
+    if(!title || !category || !date || !author){
+
+        toast(
+            "Please complete all required fields.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       BUSINESS RULE 1:
+       Faculty cannot directly approve
+       their own research.
+    */
+
+    if(
+        user.role !== "Administrator" &&
+        (status === "Approved" ||
+         status === "Published")
+    ){
+
+        status = "Pending";
+
+        toast(
+            "Faculty submissions must be reviewed by an administrator.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       BUSINESS RULE 2:
+       Research date cannot be in the future.
+    */
+
+    if(new Date(date) > new Date()){
+
+        toast(
+            "Research date cannot be in the future.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       BUSINESS RULE 3:
+       Duplicate titles by the same
+       researcher are not allowed.
+    */
+
+    const records = getResearch();
+
+    const duplicate =
+        records.find(r =>
+            r.title.toLowerCase() ===
+            title.toLowerCase() &&
+            r.email === user.email &&
+            String(r.id) !== String(id)
+        );
+
+    if(duplicate){
+
+        toast(
+            "Duplicate research title detected.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(id){
+
+        const index =
+            records.findIndex(
+                r => String(r.id) === String(id)
+            );
+
+        if(index === -1) return;
+
+        /*
+           Faculty can only edit their own
+           records.
+        */
+
+        if(
+            user.role !== "Administrator" &&
+            records[index].email !== user.email
+        ){
+
+            toast(
+                "You cannot edit another faculty member's research.",
+                "error"
+            );
+
+            return;
+
+        }
+
+        records[index] = {
+
+            ...records[index],
+
+            title,
+            category,
+            date,
+            author,
+            department,
+            description,
+            journal,
+            status
+
+        };
+
+        addHistory(
+            "UPDATE RESEARCH",
+            `Updated research: ${title}`
+        );
+
+        toast(
+            "Research updated successfully."
+        );
+
+    }else{
+
+        const newRecord = {
+
+            id:Date.now(),
+
+            title,
+            category,
+            date,
+            author,
+            email:user.email,
+            department,
+            description,
+            journal,
+
+            /*
+               Faculty submissions start
+               as Pending.
+            */
+
+            status:
+                user.role === "Administrator"
+                ? status
+                : "Pending",
+
+            created:
+                new Date().toISOString()
+
+        };
+
+        records.push(newRecord);
+
+        addHistory(
+            "CREATE RESEARCH",
+            `Created research: ${title}`
+        );
+
+        toast(
+            "Research submitted successfully."
+        );
+
+    }
+
+    saveResearch(records);
+
+    closeResearchModal();
+
+    updateAll();
+
+}
+
+
+/* ================= RENDER RESEARCH ================= */
+
+function renderResearch(){
+
+    const user = currentUser();
+
+    if(!user) return;
+
+    let records = getResearch();
+
+    if(user.role !== "Administrator"){
+
+        records =
+            records.filter(
+                r => r.email === user.email
+            );
+
+    }
+
+    const search =
+        document.getElementById(
+            "researchSearch"
+        )?.value
+        .toLowerCase() || "";
+
+    const status =
+        document.getElementById(
+            "researchStatus"
+        )?.value || "";
+
+    const type =
+        document.getElementById(
+            "researchType"
+        )?.value || "";
+
+    records =
+        records.filter(r => {
+
+            const matchesSearch =
+                !search ||
+                r.title.toLowerCase().includes(search) ||
+                r.author.toLowerCase().includes(search) ||
+                r.category.toLowerCase().includes(search);
+
+            const matchesStatus =
+                !status ||
+                r.status === status;
+
+            const matchesType =
+                !type ||
+                r.category === type;
+
+            return (
+                matchesSearch &&
+                matchesStatus &&
+                matchesType
+            );
+
+        });
+
+
+    const tbody =
+        document.getElementById(
+            "researchTable"
+        );
+
+    tbody.innerHTML =
+        records.map(r => `
+
+            <tr>
+
+                <td>#${r.id}</td>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(r.title)}
+                    </strong>
+                    <br>
+                    <small style="color:#667085">
+                        ${escapeHTML(r.journal || "No journal")}
+                    </small>
+                </td>
+
+                <td>
+                    ${escapeHTML(r.author)}
+                </td>
+
+                <td>
+                    ${escapeHTML(r.category)}
+                </td>
+
+                <td>
+                    ${r.date}
+                </td>
+
+                <td>
+                    ${statusBadge(r.status)}
+                </td>
+
+                <td>
+
+                    <div class="action-group">
+
+                        <button
+                            class="action-btn"
+                            style="background:#e7f0ff;color:#2057a6"
+                            onclick="openResearchModal(${r.id})">
+                            Edit
+                        </button>
+
+                        <button
+                            class="action-btn"
+                            style="background:#ffe5e5;color:#b42318"
+                            onclick="deleteResearch(${r.id})">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `).join("") ||
+
+        `<tr>
+            <td colspan="7">
+                No research records found.
+            </td>
+        </tr>`;
+
+}
+
+
+function statusBadge(status){
+
+    const map = {
+
+        "Pending":"status-pending",
+        "Under Review":"status-review",
+        "Approved":"status-approved",
+        "Rejected":"status-rejected",
+        "Published":"status-published"
+
+    };
+
+    return `
+        <span class="status ${map[status] || ""}">
+            ${status}
+        </span>
+    `;
+
+}
+
+
+/* ================= DELETE ================= */
+
+function deleteResearch(id){
+
+    const user = currentUser();
+
+    const records = getResearch();
+
+    const record =
+        records.find(r => r.id === id);
+
+    if(!record) return;
+
+    if(
+        user.role !== "Administrator" &&
+        record.email !== user.email
+    ){
+
+        toast(
+            "You cannot delete another user's record.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(!confirm(
+        "Are you sure you want to delete this research record?"
+    )) return;
+
+    const remaining =
+        records.filter(
+            r => r.id !== id
+        );
+
+    saveResearch(remaining);
+
+    addHistory(
+        "DELETE RESEARCH",
+        `Deleted research: ${record.title}`
+    );
+
+    toast(
+        "Research record deleted."
+    );
+
+    updateAll();
+
+}
+
+
+/* ================= WORKFLOW ================= */
+
+function renderWorkflow(){
+
+    const user = currentUser();
+
+    let records = getResearch();
+
+    if(user.role !== "Administrator"){
+
+        records =
+            records.filter(
+                r => r.email === user.email
+            );
+
+    }
+
+    document.getElementById(
+        "workflowTable"
+    ).innerHTML =
+
+        records.map(r => {
+
+            let actions = "";
+
+            if(user.role === "Administrator"){
+
+                if(r.status === "Pending"){
+
+                    actions = `
+                        <button
+                            class="action-btn"
+                            style="background:#e4efff;color:#2259a5"
+                            onclick="changeStatus(${r.id},'Under Review')">
+                            Start Review
+                        </button>
+                    `;
+
+                }
+
+                else if(r.status === "Under Review"){
+
+                    actions = `
+
+                        <button
+                            class="action-btn"
+                            style="background:#dff6e7;color:#19713b"
+                            onclick="changeStatus(${r.id},'Approved')">
+                            Approve
+                        </button>
+
+                        <button
+                            class="action-btn"
+                            style="background:#fde3e3;color:#a62929"
+                            onclick="changeStatus(${r.id},'Rejected')">
+                            Reject
+                        </button>
+
+                    `;
+
+                }
+
+                else if(r.status === "Approved"){
+
+                    actions = `
+
+                        <button
+                            class="action-btn"
+                            style="background:#e4f5f3;color:#176d65"
+                            onclick="changeStatus(${r.id},'Published')">
+                            Mark Published
+                        </button>
+
+                    `;
+
+                }
+
+                else{
+
+                    actions =
+                        `<small style="color:#667085">
+                            No action required
+                        </small>`;
+
+                }
+
+            }else{
+
+                actions =
+                    `<small style="color:#667085">
+                        Awaiting administrator action
+                    </small>`;
+
+            }
+
+
+            return `
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            ${escapeHTML(r.title)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHTML(r.author)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(r.status)}
+                    </td>
+
+                    <td>
+                        <div class="action-group">
+                            ${actions}
+                        </div>
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("") ||
+
+        `<tr>
+            <td colspan="4">
+                No workflow records.
+            </td>
+        </tr>`;
+
+}
+
+
+function changeStatus(id,newStatus){
+
+    const user = currentUser();
+
+    if(user.role !== "Administrator"){
+
+        toast(
+            "Only administrators can process research approvals.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    const records = getResearch();
+
+    const record =
+        records.find(
+            r => r.id === id
+        );
+
+    if(!record) return;
+
+
+    /*
+       WORKFLOW VALIDATION
+    */
+
+    const allowed = {
+
+        "Pending":["Under Review"],
+
+        "Under Review":[
+            "Approved",
+            "Rejected"
+        ],
+
+        "Approved":[
+            "Published"
+        ],
+
+        "Rejected":[
+            "Under Review"
+        ],
+
+        "Published":[]
+
+    };
+
+
+    if(
+        !allowed[record.status]
+            .includes(newStatus)
+    ){
+
+        toast(
+            `Invalid status transition: ${record.status} → ${newStatus}`,
+            "error"
+        );
+
+        return;
+
+    }
+
+    record.status = newStatus;
+
+    saveResearch(records);
+
+    addHistory(
+        "STATUS UPDATE",
+        `${record.title}: ${newStatus}`
+    );
+
+    toast(
+        `Research status changed to ${newStatus}.`
+    );
+
+    updateAll();
+
+}
+
+
+/* ================= USERS ================= */
+
+function renderUsers(){
+
+    const users = getUsers();
+
+    document.getElementById(
+        "usersTable"
+    ).innerHTML =
+
+        users.map(u => `
+
+            <tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(u.name)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(u.email)}
+                </td>
+
+                <td>
+                    ${escapeHTML(u.department)}
+                </td>
+
+                <td>
+                    ${escapeHTML(u.position)}
+                </td>
+
+                <td>
+                    <span class="status ${
+                        u.role === "Administrator"
+                        ? "status-approved"
+                        : "status-review"
+                    }">
+                        ${u.role}
+                    </span>
+                </td>
+
+                <td>
+                    ${u.joined}
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+/* ================= PROFILE ================= */
+
+function renderProfile(){
+
+    const user = currentUser();
+
+    if(!user) return;
+
+    document.getElementById(
+        "profileAvatar"
+    ).textContent =
+        initials(user.name);
+
+    document.getElementById(
+        "profileName"
+    ).textContent =
+        user.name;
+
+    document.getElementById(
+        "profileRole"
+    ).textContent =
+        user.role;
+
+    document.getElementById(
+        "profileFullName"
+    ).value =
+        user.name || "";
+
+    document.getElementById(
+        "profileEmail"
+    ).value =
+        user.email || "";
+
+    document.getElementById(
+        "profileDepartment"
+    ).value =
+        user.department || "";
+
+    document.getElementById(
+        "profilePosition"
+    ).value =
+        user.position || "";
+
+    document.getElementById(
+        "profileContact"
+    ).value =
+        user.contact || "";
+
+    document.getElementById(
+        "profileSpecialization"
+    ).value =
+        user.specialization || "";
+
+}
+
+
+function saveProfile(){
+
+    const user = currentUser();
+
+    if(!user) return;
+
+    const users = getUsers();
+
+    const index =
+        users.findIndex(
+            u => u.id === user.id
+        );
+
+    if(index === -1) return;
+
+
+    const name =
+        document.getElementById(
+            "profileFullName"
+        ).value.trim();
+
+    const email =
+        document.getElementById(
+            "profileEmail"
+        ).value.trim()
+        .toLowerCase();
+
+    const department =
+        document.getElementById(
+            "profileDepartment"
+        ).value.trim();
+
+    const position =
+        document.getElementById(
+            "profilePosition"
+        ).value.trim();
+
+    const contact =
+        document.getElementById(
+            "profileContact"
+        ).value.trim();
+
+    const specialization =
+        document.getElementById(
+            "profileSpecialization"
+        ).value.trim();
+
+
+    if(!name || !email){
+
+        toast(
+            "Name and email are required.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Prevent duplicate emails.
+    */
+
+    const duplicate =
+        users.find(
+            u =>
+                u.email === email &&
+                u.id !== user.id
+        );
+
+    if(duplicate){
+
+        toast(
+            "Email address is already used.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    users[index] = {
+
+        ...users[index],
+
+        name,
+        email,
+        department,
+        position,
+        contact,
+        specialization
+
+    };
+
+    saveUsers(users);
+
+    /*
+       Update email in existing research
+       records belonging to this user.
+    */
+
+    const research = getResearch();
+
+    research.forEach(r => {
+
+        if(r.email === user.email){
+
+            r.email = email;
+            r.author = name;
+            r.department = department;
+
+        }
+
+    });
+
+    saveResearch(research);
+
+    addHistory(
+        "UPDATE PROFILE",
+        "Updated personal profile information."
+    );
+
+    toast(
+        "Profile updated successfully."
+    );
+
+    initializeApp();
+
+    renderProfile();
+
+}
+
+
+/* ================= REPORTS ================= */
+
+function renderReports(){
+
+    const user = currentUser();
+
+    let records = getResearch();
+
+    if(user.role !== "Administrator"){
+
+        records =
+            records.filter(
+                r => r.email === user.email
+            );
+
+    }
+
+    document.getElementById(
+        "reportTotal"
+    ).textContent =
+        records.length;
+
+    document.getElementById(
+        "reportApproved"
+    ).textContent =
+        records.filter(
+            r => r.status === "Approved"
+        ).length;
+
+    document.getElementById(
+        "reportPublished"
+    ).textContent =
+        records.filter(
+            r => r.status === "Published"
+        ).length;
+
+
+    const typeCounts = {};
+
+    records.forEach(r => {
+
+        typeCounts[r.category] =
+            (typeCounts[r.category] || 0) + 1;
+
+    });
+
+
+    document.getElementById(
+        "typeReport"
+    ).innerHTML =
+
+        Object.entries(typeCounts)
+        .map(([type,count]) => `
+
+            <div style="
+                padding:14px;
+                border-bottom:1px solid #edf0f4;
+                display:flex;
+                justify-content:space-between">
+
+                <span>
+                    ${escapeHTML(type)}
+                </span>
+
+                <strong>
+                    ${count}
+                </strong>
+
+            </div>
+
+        `).join("") ||
+
+        "<p>No data available.</p>";
+
+
+    const deptCounts = {};
+
+    records.forEach(r => {
+
+        deptCounts[r.department] =
+            (deptCounts[r.department] || 0) + 1;
+
+    });
+
+
+    document.getElementById(
+        "departmentReport"
+    ).innerHTML =
+
+        Object.entries(deptCounts)
+        .map(([dept,count]) => `
+
+            <div style="
+                padding:14px;
+                border-bottom:1px solid #edf0f4;
+                display:flex;
+                justify-content:space-between">
+
+                <span>
+                    ${escapeHTML(dept)}
+                </span>
+
+                <strong>
+                    ${count}
+                </strong>
+
+            </div>
+
+        `).join("") ||
+
+        "<p>No data available.</p>";
+
+}
+
+
+/* ================= HISTORY ================= */
+
+function addHistory(action,details){
+
+    const user = currentUser();
+
+    const history = getHistory();
+
+    history.unshift({
+
+        id:Date.now(),
+
+        date:new Date().toISOString(),
+
+        user:user
+            ? user.name
+            : "System",
+
+        action,
+
+        details
+
+    });
+
+    saveHistory(
+        history.slice(0,300)
+    );
+
+}
+
+
+function renderHistory(){
+
+    const user = currentUser();
+
+    let history = getHistory();
+
+    /*
+       Faculty sees their own activity.
+       Administrator sees all activities.
+    */
+
+    if(
+        user &&
+        user.role !== "Administrator"
+    ){
+
+        history =
+            history.filter(
+                h => h.user === user.name
+            );
+
+    }
+
+
+    document.getElementById(
+        "historyTable"
+    ).innerHTML =
+
+        history.map(h => `
+
+            <tr>
+
+                <td>
+                    ${formatDateTime(h.date)}
+                </td>
+
+                <td>
+                    ${escapeHTML(h.user)}
+                </td>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(h.action)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(h.details)}
+                </td>
+
+            </tr>
+
+        `).join("") ||
+
+        `<tr>
+            <td colspan="4">
+                No activity history.
+            </td>
+        </tr>`;
+
+}
+
+
+function formatDateTime(date){
+
+    return new Date(date)
+        .toLocaleString(
+            "en-PH",
+            {
+                dateStyle:"medium",
+                timeStyle:"short"
+            }
+        );
+
+}
+
+
+/* ================= EXPORT ================= */
+
+function exportCSV(){
+
+    const user = currentUser();
+
+    let records = getResearch();
+
+    if(user.role !== "Administrator"){
+
+        records =
+            records.filter(
+                r => r.email === user.email
+            );
+
+    }
+
+
+    let csv =
+        "ID,Title,Faculty,Email,Department,Type,Date,Status,Journal\n";
+
+
+    records.forEach(r => {
+
+        csv += [
+
+            r.id,
+            csvEscape(r.title),
+            csvEscape(r.author),
+            csvEscape(r.email),
+            csvEscape(r.department),
+            csvEscape(r.category),
+            r.date,
+            r.status,
+            csvEscape(r.journal)
+
+        ].join(",") + "\n";
+
+    });
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {type:"text/csv;charset=utf-8;"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "CARD-MRI-Research-Report.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+    addHistory(
+        "EXPORT REPORT",
+        "Research records exported to CSV."
+    );
+
+    toast(
+        "CSV report exported."
+    );
+
+}
+
+
+function csvEscape(value){
+
+    value = value || "";
+
+    return `"${String(value)
+        .replace(/"/g,'""')}"`;
+
+}
+
+
+/* ================= NOTIFICATIONS ================= */
+
+function updateNotifications(){
+
+    const user = currentUser();
+
+    if(!user) return;
+
+    let research = getResearch();
+
+    if(user.role !== "Administrator"){
+
+        research =
+            research.filter(
+                r => r.email === user.email
+            );
+
+    }
+
+    const pending =
+        research.filter(
+            r =>
+                r.status === "Pending" ||
+                r.status === "Under Review"
+        ).length;
+
+    document.getElementById(
+        "notificationBadge"
+    ).textContent =
+        pending;
+
+}
+
+
+/* ================= GLOBAL UPDATE ================= */
+
+function updateAll(){
+
+    updateDashboard();
+
+    renderResearch();
+
+    renderWorkflow();
+
+    renderUsers();
+
+    renderReports();
+
+    renderHistory();
+
+    renderProfile();
+
+    updateNotifications();
+
+}
+
+
+/* ================= SECURITY DISPLAY ================= */
+
+function escapeHTML(value){
+
+    if(value === null ||
+       value === undefined)
+        return "";
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= START ================= */
+
+initializeData();
+
+const session = getSession();
+
+if(session){
+
+    const user = currentUser();
+
+    if(user){
+
+        document
+            .getElementById("authScreen")
+            .classList.add("hidden");
+
+        document
+            .getElementById("app")
+            .classList.remove("hidden");
+
+        initializeApp();
+
+    }
+
+}
+
+
+/* ================= KEYBOARD ================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Escape"){
+
+            closeResearchModal();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
